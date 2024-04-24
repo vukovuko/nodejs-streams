@@ -10,8 +10,18 @@ class MyStream extends Readable {
 
 const stream = new MyStream();
 
-stream.on('data', chunk => { // Send data all at once
-    console.log(chunk.toString());
-    stream.pause();
-    setTimeout(() => stream.resume(), 1000);
-})
+// stream.on('data', chunk => { // Send data all at once
+//     console.log(chunk.toString());
+//     stream.pause();
+//     setTimeout(() => stream.resume(), 1000);
+// });
+
+stream.on('readable', () => {
+    console.count('>> readable event');
+    let chunk;
+    while ((chunk = stream.read()) !== null) {
+        console.log(chunk.toString());
+    }
+});
+
+stream.on('end', () => console.log('>> end event'));
